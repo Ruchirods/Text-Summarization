@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<title>Information Technology Concentration</title>
+<head> <link rel="stylesheet" href="home.css">
+	<xml ID="test" SRC="test_xml.xml"></xml>
+<script type="text/javascript">
+	function findreview(){
+		var myXML,myNodes;
+		var display="";
+   myXML= document.all("test").XMLDocument;
+   myNodes=myXML.getElementsByTagName("nounchunk");
+   for(var counter=0;counter<myNodes.length;counter++){
+   	display +=myNodes.item(counter).firstChild.nodeValue+"\n";
+   }
+   document.show.me.value=display;
+   }
+	
+	function GetData1()
+    {
+
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", "summary1.txt",false);
+        rawFile.onreadystatechange = function ()
+    {
+       
+                var allText = rawFile.responseText;
+                alert(allText);
+        
+    }
+    rawFile.send(null);
+
+    // excel.Visible=false
+    // var book = excel.Workbooks.Open("C:/Users/ruchi/PycharmProjects/Summarization/abc/summary.xls");
+    // var sht = book.Worksheets.Item(1);
+    // my_textarea2.innerText = book.ActiveSheet.Cells(1,1).Value;
+    // my_textarea2.innerText = "sht.Cells(1,2).Value";
+    // excel.quit()
+    // excel.application.quit();
+    }
+
+
+
+</script>
+
+
+</head>
+<body class="bg">
+<div class="header">
+  <h1>Text Summarization</h1>
+</div>
+
+<div class="container">
+  <form class="form_class">
+  	<label style="font: bold;">Select the hotel to get the summarized review:</label>
+    <SELECT>
+    	<option value="1">Hotel 1</option>
+    	<option value="2">Hotel 2</option>
+    	<option value="3">Hotel 3</option>
+    </SELECT>
+    <br> 
+    <br>
+    <input type="button" value="Enter" style="margin-left: 20%" onClick="GetData1()">
+    <br>
+    <br>
+    <input type=text name="my_textarea2" value="Summary..">
+  </form>
+</div>
+</body>
+</html>

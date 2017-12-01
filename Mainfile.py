@@ -28,9 +28,9 @@ def preprocessing():
         sen=sen.lower()
         sen1=""
         sen1=strip_punctuation(sen)
-        sen1 = ' '.join([word for word in sen1.split() if word not in stopwords.words("english")])
+        sen1 = ' '.join([word for word in sen1.split() if word not in stopwords.words("english")]) #removes stopwords if present
         newsen.append(sen1)
-        taggedsen=nltk.pos_tag(word_tokenize(sen1))
+        taggedsen=nltk.pos_tag(word_tokenize(sen1)) #performs POS tagging so that only sentences with noun and adjective can be retained.
         grammar = "NP: {<DT>?<JJ>*<NN>}"
         cp = nltk.RegexpParser(grammar)
         result = cp.parse(taggedsen)
@@ -76,6 +76,7 @@ def tagging(processeddata):
 
    return taggedfile
 
+'''Performs SVD and calculates maltrix multiplication of U and S for evaluation'''
 def CountVec(nounchunks,noofsentence):
     vectorizer = CountVectorizer(min_df=1,stop_words = 'english')
     A = vectorizer.fit_transform(nounchunks)
@@ -89,6 +90,7 @@ def CountVec(nounchunks,noofsentence):
     C=np.matmul(U,S)
     return U,S,VT,C
 
+'''performs square of all elements in a vector'''
 def square(list):
     sum=0
     for i in list:
@@ -122,8 +124,7 @@ def SingularValueDecomposition(nounchunks,noofsentence):
             finalsummary.append(' '+nounchunks[index[i-1]])
             sheet1.write(i,0,nounchunks[index[i-1]])
             sheet1.write(i,1,maxvalue[i-1])
-        file.close()
-
+        book.save("Summary.xls")
         U,S,VT,Output=CountVec(finalsummary,noofsentence)
         print len(Output)
         Output_dec=sorted(Output,reverse=True)
@@ -135,9 +136,12 @@ def SingularValueDecomposition(nounchunks,noofsentence):
         outputMag=np.sqrt(outputMag)
         similarity=simneu/(inputMag*outputMag)
         theta=math.acos(similarity)*180/math.pi
+        file.write('Differentce between the input and summary: %f"'%theta)
+        #file.write(theta)
         print "Differentce between the input and summary:",theta
+        file.close()
 
-"""function to find the sentiment of nounchunks"""
+"""function to find the sentiment of nounchunks and retain sentences with positive and neutral orientation"""
 def sentiment(nounchunk):
     sa=SentimentAnalysis()
     positive_sentences, negative_sentences, neutral_sentences = sa.get_sentence_orientation(nounchunk)
